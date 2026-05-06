@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Random Quotes Python API</title>
+  <style>
+  @import url("https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0-alpha2/katex.min.css");
+
+  body {
+    font-family: Georgia, Cambria, serif;
+    font-size: 14px;
+    line-height: 1.7;
+    color: #373D49;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 600;
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+  }
+  h1 { font-size: 2em; }
+  h2 { font-size: 1.5em; }
+  h3 { font-size: 1.25em; }
+  a { color: #35D7BB; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  code {
+    font-family: "Ubuntu Mono", Monaco, monospace;
+    background: #F5F7FA;
+    padding: 0.2em 0.4em;
+    border-radius: 3px;
+  }
+  pre {
+    background: #F5F7FA;
+    padding: 1em;
+    border-radius: 3px;
+    overflow-x: auto;
+  }
+  .hljs {
+    display: block;
+    overflow-x: auto;
+    padding: 0;
+    color: #333;
+  }
+  pre code { background: none; padding: 0; }
+  blockquote {
+    border-left: 3px solid #A0AABF;
+    padding-left: 1em;
+    margin-left: 0;
+    font-style: italic;
+    color: #666;
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  th, td {
+    border: 1px solid #E8E8E8;
+    padding: 0.5em;
+    text-align: left;
+  }
+  th {
+    background: #F5F7FA;
+    font-weight: 600;
+  }
+  #preview .table {
+    width: auto;
+  }
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+  .katex-display {
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+</style>
+</head>
+<body id="preview">
+<h1 class="code-line has-line-data" data-line-start="0" data-line-end="1"><a id="Random_Quotes_Python_API_0"></a>📌 Random Quotes Python API</h1>
+<h2 class="code-line has-line-data" data-line-start="2" data-line-end="3"><a id="Overview_2"></a>🧾 Overview</h2>
+<p class="has-line-data" data-line-start="4" data-line-end="5">Build a REST API in Python that returns a random quote along with its author, based on two data sources: <code>quotes.json</code> and <code>authors.json</code>.</p>
+<hr>
+<h2 class="code-line has-line-data" data-line-start="8" data-line-end="9"><a id="Data_Files_8"></a>📁 Data Files</h2>
+<h3 class="code-line has-line-data" data-line-start="10" data-line-end="11"><a id="quotesjson_10"></a><code>quotes.json</code></h3>
+<p class="has-line-data" data-line-start="12" data-line-end="13">Contains a list of quotes. Each entry includes:</p>
+<ul>
+<li class="has-line-data" data-line-start="14" data-line-end="15"><code>id</code>: unique identifier for the quote</li>
+<li class="has-line-data" data-line-start="15" data-line-end="17"><code>quote</code>: the quote text</li>
+</ul>
+<p class="has-line-data" data-line-start="17" data-line-end="18"><strong>Example:</strong></p>
+<pre><code class="has-line-data language-json" data-line-start="20" data-line-end="25"><span class="hljs-punctuation">{</span>
+  <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">23</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;quote&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;I am not a product of my circumstances. I am a product of my decisions.&quot;</span>
+<span class="hljs-punctuation">}</span>
+</code></pre>
+<hr>
+<h3 class="code-line has-line-data" data-line-start="28" data-line-end="29"><a id="authorsjson_28"></a><code>authors.json</code></h3>
+<p class="has-line-data" data-line-start="30" data-line-end="31">Contains a list of authors and their associated quote IDs.</p>
+<ul>
+<li class="has-line-data" data-line-start="32" data-line-end="33"><code>id</code>: unique identifier for the author</li>
+<li class="has-line-data" data-line-start="33" data-line-end="34"><code>author</code>: author name</li>
+<li class="has-line-data" data-line-start="34" data-line-end="36"><code>quoteIds</code>: list of quote IDs written by the author</li>
+</ul>
+<p class="has-line-data" data-line-start="36" data-line-end="37"><strong>Example:</strong></p>
+<pre><code class="has-line-data language-json" data-line-start="39" data-line-end="45"><span class="hljs-punctuation">{</span>
+  <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">21</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;author&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Stephen Covey&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;quoteIds&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-number">23</span><span class="hljs-punctuation">]</span>
+<span class="hljs-punctuation">}</span>
+</code></pre>
+<hr>
+<h2 class="code-line has-line-data" data-line-start="48" data-line-end="49"><a id="Requirements_48"></a>⚙️ Requirements</h2>
+<h3 class="code-line has-line-data" data-line-start="50" data-line-end="51"><a id="1_Authentication_50"></a>1. Authentication</h3>
+<ul>
+<li class="has-line-data" data-line-start="52" data-line-end="54">
+<p class="has-line-data" data-line-start="52" data-line-end="53">Protect the API using a Bearer token passed in the <code>Authorization</code> header.</p>
+</li>
+<li class="has-line-data" data-line-start="54" data-line-end="60">
+<p class="has-line-data" data-line-start="54" data-line-end="55">Expected format:</p>
+<pre><code class="has-line-data" data-line-start="57" data-line-end="59">Authorization: Bearer DEMO_AUTH@2022
+</code></pre>
+</li>
+<li class="has-line-data" data-line-start="60" data-line-end="62">
+<p class="has-line-data" data-line-start="60" data-line-end="61">Implement authentication using a <strong>custom decorator</strong> (or equivalent mechanism depending on the framework).</p>
+</li>
+<li class="has-line-data" data-line-start="62" data-line-end="73">
+<p class="has-line-data" data-line-start="62" data-line-end="63"><strong>Unauthorized response</strong></p>
+<ul>
+<li class="has-line-data" data-line-start="64" data-line-end="65">
+<p class="has-line-data" data-line-start="64" data-line-end="65">Status: <code>403 Forbidden</code></p>
+</li>
+<li class="has-line-data" data-line-start="65" data-line-end="73">
+<p class="has-line-data" data-line-start="65" data-line-end="66">Body:</p>
+<pre><code class="has-line-data language-json" data-line-start="68" data-line-end="72"><span class="hljs-punctuation">{</span>
+  <span class="hljs-attr">&quot;message&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;You are not authorized to use this API!&quot;</span>
+<span class="hljs-punctuation">}</span>
+</code></pre>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 class="code-line has-line-data" data-line-start="75" data-line-end="76"><a id="2_Endpoint_75"></a>2. Endpoint</h3>
+<ul>
+<li class="has-line-data" data-line-start="77" data-line-end="83">
+<p class="has-line-data" data-line-start="77" data-line-end="78">Implement a <strong>GET</strong> endpoint at:</p>
+<pre><code class="has-line-data" data-line-start="80" data-line-end="82">/quote/random
+</code></pre>
+</li>
+<li class="has-line-data" data-line-start="83" data-line-end="88">
+<p class="has-line-data" data-line-start="83" data-line-end="84">The endpoint should:</p>
+<ol>
+<li class="has-line-data" data-line-start="85" data-line-end="86">Select a random quote from <code>quotes.json</code></li>
+<li class="has-line-data" data-line-start="86" data-line-end="88">Resolve and include the corresponding author using <code>authors.json</code></li>
+</ol>
+</li>
+</ul>
+<blockquote>
+<p class="has-line-data" data-line-start="88" data-line-end="89">🔎 Note: Each quote is linked to an author via <code>quoteIds</code>.</p>
+</blockquote>
+<hr>
+<h3 class="code-line has-line-data" data-line-start="92" data-line-end="93"><a id="3_Response_92"></a>3. Response</h3>
+<ul>
+<li class="has-line-data" data-line-start="94" data-line-end="96">
+<p class="has-line-data" data-line-start="94" data-line-end="95"><strong>Status:</strong> <code>200 OK</code></p>
+</li>
+<li class="has-line-data" data-line-start="96" data-line-end="98">
+<p class="has-line-data" data-line-start="96" data-line-end="97"><strong>Response body:</strong></p>
+</li>
+</ul>
+<pre><code class="has-line-data language-json" data-line-start="99" data-line-end="105"><span class="hljs-punctuation">{</span>
+  <span class="hljs-attr">&quot;quoteId&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">23</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;quote&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;I am not a product of my circumstances. I am a product of my decisions.&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;author&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Stephen Covey&quot;</span>
+<span class="hljs-punctuation">}</span>
+</code></pre>
+<hr>
+<h3 class="code-line has-line-data" data-line-start="108" data-line-end="109"><a id="4_Usage_Tracking_Reporting_108"></a>4. Usage Tracking &amp; Reporting</h3>
+<ul>
+<li class="has-line-data" data-line-start="110" data-line-end="112">
+<p class="has-line-data" data-line-start="110" data-line-end="111">Track how many times each quote is returned.</p>
+</li>
+<li class="has-line-data" data-line-start="112" data-line-end="117">
+<p class="has-line-data" data-line-start="112" data-line-end="113">Maintain:</p>
+<ul>
+<li class="has-line-data" data-line-start="114" data-line-end="115"><code>Quote ID</code></li>
+<li class="has-line-data" data-line-start="115" data-line-end="117"><code>Count</code> (number of times the quote was returned)</li>
+</ul>
+</li>
+<li class="has-line-data" data-line-start="117" data-line-end="125">
+<p class="has-line-data" data-line-start="117" data-line-end="118">After every <strong>100 total API calls</strong>, generate an Excel report with:</p>
+<ul>
+<li class="has-line-data" data-line-start="119" data-line-end="120">
+<p class="has-line-data" data-line-start="119" data-line-end="120"><strong>Sheet name:</strong> <code>Quotes Report</code></p>
+</li>
+<li class="has-line-data" data-line-start="120" data-line-end="125">
+<p class="has-line-data" data-line-start="120" data-line-end="121"><strong>Columns:</strong></p>
+<ul>
+<li class="has-line-data" data-line-start="122" data-line-end="123"><code>Quote ID</code></li>
+<li class="has-line-data" data-line-start="123" data-line-end="125"><code>Count</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="has-line-data" data-line-start="125" data-line-end="126"><strong>Example:</strong></p>
+<table class="table table-striped table-bordered">
+<thead>
+<tr>
+<th>Quote ID</th>
+<th>Count</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>23</td>
+<td>4</td>
+</tr>
+<tr>
+<td>10</td>
+<td>21</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 class="code-line has-line-data" data-line-start="134" data-line-end="135"><a id="5_Report_File_Naming_134"></a>5. Report File Naming</h3>
+<ul>
+<li class="has-line-data" data-line-start="136" data-line-end="138">Use the following filename format:</li>
+</ul>
+<pre><code class="has-line-data" data-line-start="139" data-line-end="141">quotes_api_report_&lt;YYYY_MM_DD_HH_MM_SS&gt;.xlsx
+</code></pre>
+<p class="has-line-data" data-line-start="142" data-line-end="143"><strong>Example:</strong></p>
+<pre><code class="has-line-data" data-line-start="145" data-line-end="147">quotes_api_report_2022_07_15_13_53_20.xlsx
+</code></pre>
+<hr>
+<h2 class="code-line has-line-data" data-line-start="150" data-line-end="151"><a id="Optional_Bonus_150"></a>🌐 Optional (Bonus)</h2>
+<h3 class="code-line has-line-data" data-line-start="152" data-line-end="153"><a id="Simple_UI_152"></a>Simple UI</h3>
+<ul>
+<li class="has-line-data" data-line-start="154" data-line-end="159">
+<p class="has-line-data" data-line-start="154" data-line-end="155">Build a minimal UI that calls your API and displays:</p>
+<ul>
+<li class="has-line-data" data-line-start="156" data-line-end="157">Quote text</li>
+<li class="has-line-data" data-line-start="157" data-line-end="159">Author name</li>
+</ul>
+</li>
+<li class="has-line-data" data-line-start="159" data-line-end="161">
+<p class="has-line-data" data-line-start="159" data-line-end="160">You may use any tools (plain HTML/JS, or frameworks like React, etc.).</p>
+</li>
+</ul>
+<hr>
+<h2 class="code-line has-line-data" data-line-start="163" data-line-end="164"><a id="Technical_Guidelines_163"></a>🛠️ Technical Guidelines</h2>
+<ul>
+<li class="has-line-data" data-line-start="165" data-line-end="166">
+<p class="has-line-data" data-line-start="165" data-line-end="166">Use Python.</p>
+</li>
+<li class="has-line-data" data-line-start="166" data-line-end="172">
+<p class="has-line-data" data-line-start="166" data-line-end="167">You may use any framework or libraries. Common options include:</p>
+<ul>
+<li class="has-line-data" data-line-start="168" data-line-end="169">FastAPI, Flask, or Django (API)</li>
+<li class="has-line-data" data-line-start="169" data-line-end="170">Pandas (data handling)</li>
+<li class="has-line-data" data-line-start="170" data-line-end="172">openpyxl or xlsxwriter (Excel export)</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 class="code-line has-line-data" data-line-start="174" data-line-end="175"><a id="Notes_Clarifications_174"></a>📎 Notes &amp; Clarifications</h2>
+<ul>
+<li class="has-line-data" data-line-start="176" data-line-end="177">
+<p class="has-line-data" data-line-start="176" data-line-end="177">You may use <strong>in-memory data structures</strong> (no database required).</p>
+</li>
+<li class="has-line-data" data-line-start="177" data-line-end="182">
+<p class="has-line-data" data-line-start="177" data-line-end="178">Ensure your code is:</p>
+<ul>
+<li class="has-line-data" data-line-start="179" data-line-end="180">Clean</li>
+<li class="has-line-data" data-line-start="180" data-line-end="181">Readable</li>
+<li class="has-line-data" data-line-start="181" data-line-end="182">Well-structured</li>
+</ul>
+</li>
+<li class="has-line-data" data-line-start="182" data-line-end="184">
+<p class="has-line-data" data-line-start="182" data-line-end="183">Handle edge cases where appropriate (e.g., missing author for a quote).</p>
+</li>
+</ul>
+<blockquote>
+<p class="has-line-data" data-line-start="184" data-line-end="185">⚠️ Clarification: GET requests do not require a request body.</p>
+</blockquote>
+<hr>
+<h2 class="code-line has-line-data" data-line-start="188" data-line-end="189"><a id="Possible_Extensions_Followup_Tasks_188"></a>🚀 Possible Extensions (Follow-up Tasks)</h2>
+<p class="has-line-data" data-line-start="190" data-line-end="191">You may be asked to extend your solution with:</p>
+<h3 class="code-line has-line-data" data-line-start="192" data-line-end="193"><a id="1_Get_Quote_by_ID_192"></a>1. Get Quote by ID</h3>
+<ul>
+<li class="has-line-data" data-line-start="194" data-line-end="200">
+<p class="has-line-data" data-line-start="194" data-line-end="195">Endpoint:</p>
+<pre><code class="has-line-data" data-line-start="197" data-line-end="199">/quote/{quoteId}
+</code></pre>
+</li>
+<li class="has-line-data" data-line-start="200" data-line-end="205">
+<p class="has-line-data" data-line-start="200" data-line-end="201">Requirements:</p>
+<ul>
+<li class="has-line-data" data-line-start="202" data-line-end="203">Return quote + author</li>
+<li class="has-line-data" data-line-start="203" data-line-end="205">Return <code>404 Not Found</code> if the quote does not exist</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 class="code-line has-line-data" data-line-start="207" data-line-end="208"><a id="2_UI_Integration_207"></a>2. UI Integration</h3>
+<ul>
+<li class="has-line-data" data-line-start="209" data-line-end="210">
+<p class="has-line-data" data-line-start="209" data-line-end="210">Connect your API to a frontend</p>
+</li>
+<li class="has-line-data" data-line-start="210" data-line-end="215">
+<p class="has-line-data" data-line-start="210" data-line-end="211">Use:</p>
+<ul>
+<li class="has-line-data" data-line-start="212" data-line-end="213"><code>fetch</code> API or</li>
+<li class="has-line-data" data-line-start="213" data-line-end="215">jQuery AJAX</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 class="code-line has-line-data" data-line-start="217" data-line-end="218"><a id="Submission_217"></a>📤 Submission</h2>
+<ul>
+<li class="has-line-data" data-line-start="219" data-line-end="220">
+<p class="has-line-data" data-line-start="219" data-line-end="220">Create a GitHub repository</p>
+</li>
+<li class="has-line-data" data-line-start="220" data-line-end="224">
+<p class="has-line-data" data-line-start="220" data-line-end="221">Include:</p>
+<ul>
+<li class="has-line-data" data-line-start="222" data-line-end="223">Full source code</li>
+<li class="has-line-data" data-line-start="223" data-line-end="224">Commit history (showing your development process)</li>
+</ul>
+</li>
+</ul>
+
+</body>
+</html>
