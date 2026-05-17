@@ -1,95 +1,48 @@
-import csv
-import pandas
-import requests
-import random
-import pandas as pd
-from flask import Flask
-import datetime
+
+from data import generate_random_quote
+from flask import Flask, jsonify, request
+
+EXPECTED_TOKEN = "DEMO_AUTH@2022"
 
 
-def protected(func):
-  def wrapper(*args, **kwargs):
-      auth_endpoint = "https://api.npoint.io/065565b0103526f8404a"
-      quotes_endpoint = "https://api.npoint.io/46926a6b3252cee685b0"
-      token = "yoyo"
-      headers = {
-          "Content-Type": "application/json",
-          "Authorization": f"Bearer {token}",
-      }
-      response = requests.get(auth_endpoint, headers=headers)
-      response.raise_for_status()
-      auth_data = response.json()
+def require_token(f):
+    def decorated_function(*args, **kwargs):
+        auth_header = request.headers.get("Authorization")
 
-      response = requests.get(quotes_endpoint, headers=headers)
-      response.raise_for_status()
-      quotes_data = response.json()
+        if not auth_header or not auth_header.startswith("Bearer "):
+            return (
+                jsonify({"message": "You are not authorized to use this API!"}),
+                403,
+            )
 
-      return func(auth_data, quotes_data, *args, **kwargs)
-  return wrapper
+        token = auth_header.split(" ")[1]
 
+        if token != EXPECTED_TOKEN:
+            return (
+                jsonify({"message": "You are not authorized to use this API!"}),
+                404,
+            )
 
-# auth_endpoint = "https://api.npoint.io/8b99da24accc43184a1a"
-# token = "yoyo"
-# headers = {
-#     "Content-Type": "application/json",
-#     "Authorization": f"Bearer {token}",
-# }
-# response = requests.get(auth_endpoint, headers=headers)
-# print(response.json())
+        return f(*args, **kwargs)
+
+    return decorated_function
 
 
 app = Flask(__name__)
 
-track_list = []
 
-
-@app.route('/')
+@app.route("/")
 def hello_world():
-    return f'Home Page'
-
-def api_calls():
-    total_calls = sum([item['count'] for item in track_list])
-
-    if total_calls > 0 and total_calls % 10 == 0:
-        time_now = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-        filename = f"quotes_api_report_{time_now}.csv"
-
-        df = pandas.DataFrame(track_list)
-        df.columns = ['Quote ID', 'Count']
-        df.to_csv(filename, index=False)
+    return f"Home Page"
 
 
+@app.route("/quote/random/", methods=["GET", "POST"])
+@require_token
+def random_quote():
+    print(request.get_json())
+    respond = jsonify(generate_random_quote()), 200
+    return respond
 
 
-@app.route('/quote/random/')
-@protected
-def random_quote(auth_data, quotes_data):
-
-    select_dict = random.choice(quotes_data)
-    random_quote_id = select_dict['id']
-    random_quote = select_dict["quote"]
-
-    found = False
-    for item in track_list:
-        if random_quote_id == item['id']:
-            item['count'] += 1
-            found = True
-            break
-    if not found:
-        track_list.append({'id': random_quote_id, 'count': 1})
-
-
-    for author in auth_data:
-        if random_quote_id in author['quoteIds']:
-            name = author["author"]
-            break
-        else:
-            name = "UNKNOWN NAME"
-
-    print(track_list)
-    print(random_quote)
-    api_calls()
-    return f'<p>Quote Of The Day: {random_quote} BY: {name}</p>'
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run(debug=True)
