@@ -56,4 +56,3 @@ def report():
 
     TOTAL_CALLS = 0
     quote_counter = {}
-
